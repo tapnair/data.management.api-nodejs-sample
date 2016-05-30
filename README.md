@@ -1,8 +1,8 @@
 # data.management-nodejs-viewer.sample
 
-[![Node.js](https://img.shields.io/badge/Node.js-0.12.4-blue.svg)](https://nodejs.org/)
-[![npm](https://img.shields.io/badge/npm-2.10.1-blue.svg)](https://www.npmjs.com/)
-[![LMV](https://img.shields.io/badge/View%20%26%20Data%20API-v1.2.23-green.svg)](http://developer-autodesk.github.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-4.4.3-blue.svg)](https://nodejs.org/)
+[![npm](https://img.shields.io/badge/npm-2.15.1-blue.svg)](https://www.npmjs.com/)
+[![LMV](https://img.shields.io/badge/View%20%26%20Data%20API-v2.8-green.svg)](http://developer-autodesk.github.io/)
 ![Platforms](https://img.shields.io/badge/platform-windows%20%7C%20osx%20%7C%20linux-lightgray.svg)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
@@ -14,18 +14,15 @@ This is a basic sample for Autodesk Forge Data Management (DM). It was designed 
 
 <b>Important:</b> The "Callback URL" specified when creating a key <b>must match</b> the one used at the [config](config.js) file. As of now (May/2016), http://localhost is not allowed as it doesn't have a . (dot) on it. There are different workarounds for this, but you may use http://local.host on your redirects. To do so, open <b>hosts files</b> and edit it: on Mac OSx, use <b>sudo nano /etc/hosts</b>; on Windows, use Notepad to open C:\Windows\System32\drivers\etc\hosts file; finally add the following line:
 
-	```
     127.0.0.1       local.host
-    ```
 
 # Setup
 
 All required packaged are listed on package.json file. Everything should work with:
 
-	```
     npm install
     node server.js
-	```
+
 Open the browser and type: http://local.host:3000 (assuming the above workaround)
 
 # Usage
