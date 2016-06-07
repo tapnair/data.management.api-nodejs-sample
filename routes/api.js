@@ -1,30 +1,8 @@
-/////////////////////////////////////////////////////////////////////
-// Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development 
-//
-// Permission to use, copy, modify, and distribute this software in
-// object code form for any purpose and without fee is hereby granted,
-// provided that the above copyright notice appears in all copies and
-// that both that copyright notice and the limited warranty and
-// restricted rights notice below appear in all supporting
-// documentation.
-//
-// AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS.
-// AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF
-// MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC.
-// DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
-// UNINTERRUPTED OR ERROR FREE.
-/////////////////////////////////////////////////////////////////////
-
 var express = require('express');
 var router = express.Router();
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
-
-var lmv = require("view-and-data");
-var config = require('./config-view-and-data');
-lmv = new lmv(config);
 
 var config = require('./config');
 var OAuth2 = require('oauth').OAuth2;
@@ -87,11 +65,10 @@ router.post('/logoff', function (req, res) {
 });
 
 router.get('/get3LegToken', function (req, res) {
-    // should be stored in session
-    //res.end(JSON.stringify(req.session.oauthcode || null));
     res.end(req.session.oauthcode);
 });
 
+/// jstree endpoint
 router.get('/getTreeNode', function (req, res) {
     var id = req.query.id;
 
@@ -136,18 +113,23 @@ router.get('/getTreeNode', function (req, res) {
     }
 });
 
-router.get('/get2LegToken', function (req, res) {
-    // ToDo: not sure what to return for LMV
-    lmv.getToken().then(function (lmvRes) {
-        res.send(lmvRes.access_token);
-    });
-});
-
 router.get('/getThumbnail', function (req, res) {
     var urn = req.query.urn;
     dm.getThumbnail(urn, req.session.env, req.session.oauthcode, function (thumb) {
         res.setHeader('Content-type', 'image/png');
         res.end(thumb, 'binary');
+    });
+});
+
+router.get('/download', function (req, res) {
+    var fileName = req.query.f;
+    var fileExtension = fileName.split('.')[fileName.split('.').length - 1];
+    var projectId = req.query.p;
+    var versionId = encodeURIComponent(req.query.v);
+    dm.downloadVersion(projectId, versionId, req.session.env, req.session.oauthcode, function (file) {
+        res.set('Content-Type', 'application/' + fileExtension);
+        res.set('Content-Disposition', 'attachment; filename="' + fileName + '"');
+        res.end(file);
     });
 });
 

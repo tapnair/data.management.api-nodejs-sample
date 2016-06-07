@@ -1,21 +1,3 @@
-/////////////////////////////////////////////////////////////////////
-// Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development 
-//
-// Permission to use, copy, modify, and distribute this software in
-// object code form for any purpose and without fee is hereby granted,
-// provided that the above copyright notice appears in all copies and
-// that both that copyright notice and the limited warranty and
-// restricted rights notice below appear in all supporting
-// documentation.
-//
-// AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS.
-// AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF
-// MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC.
-// DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
-// UNINTERRUPTED OR ERROR FREE.
-/////////////////////////////////////////////////////////////////////
-
 var request = require('request');
 var config = require('./config');
 var trim = require('trim');
@@ -36,7 +18,7 @@ module.exports = {
     getFolders: function (hubid, projectid, env, token, onsuccess) {
         // first we need to project root folder
         makeRequest(config.project(hubid, projectid), env, token, function (project) {
-            if (project.errors != null || project.data ==null || project.data.relationships==null) {
+            if (project.errors != null || project.data == null || project.data.relationships == null) {
                 onsuccess(null);
                 return;
             }
@@ -56,21 +38,32 @@ module.exports = {
             onsuccess(body.data);
         });
     },
-    getThumbnail: function (thumbnailUrn, env, token, onsuccess){
-        console.log('Requesting ' + config.baseURL(env) + config.thumbail(thumbnailUrn));
-        request({
-            url: config.baseURL(env) + config.thumbail(thumbnailUrn),
-            method: "GET",
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'x-ads-acm-namespace': 'WIPDMSTG',
-                'x-ads-acm-check-groups': true
-            },
-            encoding: null
-        }, function (error, response, body) {
-            onsuccess(new Buffer(body, 'base64'));
+    getThumbnail: function (thumbnailUrn, env, token, onsuccess) {
+        download(config.thumbail(thumbnailUrn), env, token, onsuccess);
+    },
+    
+    downloadVersion: function (projectid, versionid, env, token, onsuccess) {
+        makeRequest(config.version(projectid, versionid), env, token, function(body){
+            var downloadLink = body.data.relationships.storage.meta.link.href.replace(config.baseURL(env),'');
+            download(downloadLink, env, token, onsuccess);
         });
     }
+}
+
+function download(resource, env, token, onsuccess) {
+    console.log('Downloading ' + config.baseURL(env) + resource);
+    request({
+        url: config.baseURL(env) + resource,
+        method: "GET",
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'x-ads-acm-namespace': 'WIPDMSTG',
+            'x-ads-acm-check-groups': true
+        },
+        encoding: null
+    }, function (error, response, body) {
+        onsuccess(new Buffer(body, 'base64'));
+    });
 }
 
 function makeRequest(resource, env, token, onsuccess) {
@@ -81,7 +74,7 @@ function makeRequest(resource, env, token, onsuccess) {
         headers: {'Authorization': 'Bearer ' + token}
     }, function (error, response, body) {
         if (error != null) console.log(error); // connection problems
-        body = JSON.parse(trim(body));
+        body = JSON.parse(body);
         if (body.errors != null)console.log(body.errors);
         onsuccess(body);
     })

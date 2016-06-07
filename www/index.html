@@ -25,17 +25,18 @@
             <span class="glyphicon glyphicon-briefcase"></span> Items and
             <span class="glyphicon glyphicon-time"></span> Versions under your
             account.</h4>
-        <h4>Select an item version to show a file using  <a href="https://developer.autodesk.com/api/viewerapi/">
+        <h4>Select an item version to show a file using <a href="https://developer.autodesk.com/api/viewerapi/">
             Autodesk Viewer</a></h4>
         <h6>Writen by <a href="http://twitter.com/augustomaia">Augusto Goncalves</a> in JavaScript & NodeJS </h6>
         <div class="row" style="background: white">
             <div class="col-sm-3 forgeDMTreeView">
                 <div id="myfiles">
                     <br/>
-                    <a href="#" id="authenticate" class="btn btn-warning btn-block"><span class="glyphicon glyphicon-user"></span> SIGN IN</a>
+                    <a href="#" id="authenticate" class="btn btn-warning btn-block"><span
+                            class="glyphicon glyphicon-user"></span> SIGN IN</a>
                     <hr>
                     <label for="env">Select environment:</label>
-                    <select id="env" class="input-small form-control"  style="width:150px;">
+                    <select id="env" class="input-small form-control" style="width:150px;">
                         <option value="dev">Development</option>
                         <option value="stg" selected>Staging</option>
                         <option value="prod">Production</option>
@@ -43,10 +44,13 @@
 
                 </div>
             </div>
-            <div id="viewer" class="col-sm-9 forgeViewer"></div>
+            <div class="col-sm-9">
+                <div id="viewables" class="forgeViewables"></div>
+                <div id="viewer" class="forgeViewer"></div>
+            </div>
         </div>
     </div>
 </div>
-
+<input id="hiddenUploadField" type="file" style="visibility:hidden" />
 </body>
 </html>

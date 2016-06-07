@@ -1,23 +1,6 @@
-/////////////////////////////////////////////////////////////////////
-// Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development
-//
-// Permission to use, copy, modify, and distribute this software in
-// object code form for any purpose and without fee is hereby granted,
-// provided that the above copyright notice appears in all copies and
-// that both that copyright notice and the limited warranty and
-// restricted rights notice below appear in all supporting
-// documentation.
-//
-// AUTODESK PROVIDES THIS PROGRAM "AS IS" AND WITH ALL FAULTS.
-// AUTODESK SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTY OF
-// MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.  AUTODESK, INC.
-// DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
-// UNINTERRUPTED OR ERROR FREE.
-/////////////////////////////////////////////////////////////////////
-
 $(document).ready(function () {
     var token = get3LegToken();
+//    $.getJSON('/api/get3legToken', function (token) {
     var auth = $("#authenticate");
     if (token == '')
         auth.click(authenticate);
@@ -37,18 +20,12 @@ $(document).ready(function () {
         });
         prepareTree();
     }
+    //});
 });
 
 function get3LegToken() {
     var token = makeSyncRequest('/api/get3LegToken');
     if (token != '') console.log('3 legged token (User Authorization): ' + token);
-    return token;
-}
-
-
-function get2LegToken() {
-    var token = makeSyncRequest('/api/get2LegToken');
-    console.log('2 legged token (Developer Authentication): ' + token);
     return token;
 }
 
@@ -97,6 +74,8 @@ function PopupCenter(url, title, w, h) {
     if (window.focus) {
         newWindow.focus();
     }
+
+    return newWindow;
 }
 
 function prepareTree() {
@@ -134,7 +113,8 @@ function prepareTree() {
                 'icon': 'glyphicon glyphicon-time'
             }
         },
-        "plugins": ["types", "state", "sort"]
+        "plugins": ["types", "state", "sort", "contextmenu"],
+        contextmenu: {items: customMenu}
     }).bind(
         "activate_node.jstree", function (evt, data) {
             if (data != null && data.node != null && data.node.data != null) {
@@ -142,6 +122,106 @@ function prepareTree() {
             }
         }
     );
+}
+
+function customMenu(node) {
+    var items;
+    /*
+     if (node.type == 'folders' || node.type == 'projects') {
+     items = {
+     renameItem: {
+     label: "Upload",
+     action: function () {
+     uploadFile(node.id);
+     }
+     },
+     };
+     }
+     else*/
+    if (node.type == 'versions') {
+        items = {
+            download: {
+                label: "Download",
+                icon: "/img/download.png",
+                action: function () {
+                    downloadFile(node.text, node.id)
+                }
+            },
+            sendToDropBox: {
+                label: "Send to DropBox",
+                icon: "/img/dropbox_icon.png",
+                action: function () {
+                    sendToDropBox(node.text, node.id)
+                }
+            }
+        };
+    }
+
+    return items;
+}
+
+function downloadFile(name, id) {
+    var params = id.split('/');
+    var pId = params[params.length - 3];
+    var vId = params[params.length - 1];
+
+    var url = window.location.protocol + "//" + window.location.host +
+        "/api/download?" +
+        "f=" + name +
+        "&p=" + pId +
+        "&v=" + vId;
+
+    window.open(url, '_blank');
+}
+
+function sendToDropBox(name, id) {
+    var token = makeSyncRequest('/api/getDropboxToken');
+    if (token === '') {
+        $.ajax({
+            url: '/api/dropbox',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                'env': $("#env").val(),
+                'name': name,
+                'id': id,
+            }),
+            success: function (url) {
+                // iframes are not allowed
+                PopupCenter(url, "Dropbox Login", 800, 500);
+            },
+            error: function () {
+
+            }
+        });
+    }
+    else {
+        var params = id.split('/');
+        var pId = params[params.length - 3];
+        var vId = params[params.length - 1];
+        $.ajax({
+            url: '/api/sentToDropbox',
+            type: 'GET',
+            data: {f: name, p: pId, v: vId},
+            success: function (res) {
+                console.log(res);
+            }
+        });
+    }
+}
+
+
+function uploadFile(id) {
+    $('#hiddenUploadField').click();
+    $('#hiddenUploadField').change(function () {
+        var file = this.files[0];
+        name = file.name;
+        size = file.size;
+        type = file.type;
+
+
+    });
 }
 
 function showThumbnail(urn) {
@@ -152,47 +232,64 @@ function showThumbnail(urn) {
 // Based on Autodesk Viewer basic sample
 // https://developer.autodesk.com/api/viewerapi/
 ////////
+var viewer;
+var geometryItems = [];
+
 function initializeViewer(urn) {
     $('#viewer').html(''); // remove previous content...
+    $('#viewables').html('');
     console.log("Launching Autodesk Viewer for: " + urn);
     var options = {
         'document': 'urn:' + urn,
         'env': 'AutodeskStaging',
-        'getAccessToken': get2LegToken,
-        'refreshToken': get2LegToken,
+        'getAccessToken': get3LegToken,
+        'refreshToken': get3LegToken,
     };
+    //$('#viewer').css("background-image", "url(/api/getThumbnail?urn=" + urn + ")");
+
     var viewerElement = document.getElementById('viewer');
-    var viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerElement, {});
+    viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerElement, {});
     Autodesk.Viewing.Initializer(
         options,
         function () {
             viewer.initialize();
-            loadDocument(viewer, options.document);
+            loadDocument(options.document);
         }
     );
+
+    //loadDocument(options.document);
 }
 
-function loadDocument(viewer, documentId) {
+function loadDocument(documentId) {
     // first let's get the 3 leg token (developer & user & autodesk)
     var oauth3legtoken = get3LegToken();
-    Autodesk.Viewing.Private.refreshToken(oauth3legtoken); // workaround by Weinan Chen
+    //Autodesk.Viewing.Private.refreshToken(oauth3legtoken); // workaround by Weinan Chen
     Autodesk.Viewing.Document.load(
         documentId,
         function (doc) { // onLoadCallback
-            var geometryItems = [];
+            //var geometryItems = [];
             geometryItems = Autodesk.Viewing.Document.getSubItemsWithProperties(doc.getRootItem(), {
                 'type': 'geometry',
-                //'role': '3d' // show 3D or 2D
             }, true);
-            if (geometryItems.length > 0)
+            if (geometryItems.length > 0) {
+                geometryItems.forEach(function (item, index) {
+                    var v = $('<input type="button" value="' + item.name + '" class="btn btn-primary btn-xs"/>&nbsp;');
+                    v.click(function () {
+                        viewer.impl.unloadCurrentModel();
+                        viewer.load(doc.getViewablePath(geometryItems[index]), null, null, null, doc.acmSessionId /*session for DM*/);
+                    });
+                    $('#viewables').append(v);
+                });
                 viewer.load(doc.getViewablePath(geometryItems[0]), null, null, null, doc.acmSessionId /*session for DM*/);
+            }
         },
         function (errorMsg) { // onErrorCallback
+            // no LMV, show thumbnail instead >> working fine
             showThumbnail(documentId.substr(4, documentId.length - 1));
         }
         , {
             'oauth2AccessToken': oauth3legtoken,
-            'x-ads-acm-namespace': 'WIPDMSTG', // STG for staging,
+            'x-ads-acm-namespace': 'WIPDMSTG',//'WIPDMSecured',
             'x-ads-acm-check-groups': 'true',
         }
     )

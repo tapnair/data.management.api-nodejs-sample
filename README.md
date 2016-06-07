@@ -31,6 +31,10 @@ You must have files under your A360 account. At this time, the API only allow RE
 
 Start the sample. Login using your Autodesk Account. Expand the tree view until the <b>Version</b> (small clock icon) and click on it. The Autodesk Viewer should appear on the right with the viewable linked to this specific file version.
 
+# DropBox integration
+
+The feature <b>Send to DropBox</b> requires a developer key & secret. Please visit [DropBox Developer](https://www.dropbox.com/developers/apps) and create one.  Update the file /routes/dropbox.js with this information. For this sample, make sure to use http://localhost:3000/api/dropbox/callback as Redirect URI (for OAuth authentication). This sample code have a workaround to deal with local.host & localhost redirect, see comments at dropbox.js file. Also note that new developer keys on dropbox are created with Status:Development, so it will only work with your account (owner of the key).
+
 
 ## License
 
