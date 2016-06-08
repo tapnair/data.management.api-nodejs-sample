@@ -1,6 +1,9 @@
+// for tooltips
+var mouse_x = 0;
+var mouse_y = 0;
+
 $(document).ready(function () {
     var token = get3LegToken();
-//    $.getJSON('/api/get3legToken', function (token) {
     var auth = $("#authenticate");
     if (token == '')
         auth.click(authenticate);
@@ -20,7 +23,11 @@ $(document).ready(function () {
         });
         prepareTree();
     }
-    //});
+
+    $(document).mousemove(function (event) {
+        mouse_x = event.pageX;
+        mouse_y = event.pageY;
+    });
 });
 
 function get3LegToken() {
@@ -115,30 +122,40 @@ function prepareTree() {
         },
         "plugins": ["types", "state", "sort", "contextmenu"],
         contextmenu: {items: customMenu}
-    }).bind(
-        "activate_node.jstree", function (evt, data) {
+    }).bind("activate_node.jstree", function (evt, data) {
             if (data != null && data.node != null && data.node.data != null) {
                 initializeViewer(data.node.data);
             }
         }
-    );
+    ).on('hover_node.jstree', function (e, data) {
+        if (data.node.type === 'versions') {
+            $('#thumbnail_tooltip').find('img').attr('src', '/api/getThumbnail?urn=' + data.node.data);
+            $('#thumbnail_tooltip')
+                .css('position', 'absolute')
+                .css('top', mouse_y)
+                .css('left', mouse_x)
+                .show();
+        }
+    }).on('dehover_node.jstree', function () {
+        $('#thumbnail_tooltip').hide();
+    });
 }
 
 function customMenu(node) {
     var items;
-    /*
-     if (node.type == 'folders' || node.type == 'projects') {
-     items = {
-     renameItem: {
-     label: "Upload",
-     action: function () {
-     uploadFile(node.id);
-     }
-     },
-     };
-     }
-     else*/
-    if (node.type == 'versions') {
+
+    if (node.type == 'projects' /*|| node.type == 'projects'*/) {
+        items = {
+            renameItem: {
+                label: "Upload",
+                icon: "/img/upload.png",
+                action: function () {
+                    uploadFile(node);
+                }
+            },
+        };
+    }
+    else if (node.type == 'versions') {
         items = {
             download: {
                 label: "Download",
@@ -212,15 +229,46 @@ function sendToDropBox(name, id) {
 }
 
 
-function uploadFile(id) {
+function uploadFile(node) {
     $('#hiddenUploadField').click();
     $('#hiddenUploadField').change(function () {
         var file = this.files[0];
-        name = file.name;
-        size = file.size;
-        type = file.type;
+        //size = file.size;
+        //type = file.type;
+        switch (node.type) {
+            // case 'projects' // ToDo
+            case 'projects':
+                var formData = new FormData();
+                formData.append('fileToUpload', file);
+                formData.append('id', node.id);
 
+                $.ajax({
+                    url: '/api/upload',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function (data) {
+                        $('#myfiles').jstree(true).refresh_node(node);
+                    }
+                });
 
+                /*
+                 // upload with progress bar ToDo
+                 var xhr = new XMLHttpRequest();
+                 xhr.open('post', '/api/upload', true);
+                 xhr.upload.onprogress = function (e) {
+                 if (e.lengthComputable) {
+                 //var percentage = (e.loaded / e.total) * 100;
+                 //$('div.progress div.bar').css('width', percentage + '%');
+                 }
+                 };
+                 xhr.onload = function () {
+                 }
+                 xhr.send(formData);
+                 */
+                break;
+        }
     });
 }
 

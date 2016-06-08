@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Forge Data Management - Viewer</title>
     <link rel="stylesheet" href="/css/index.css"/>
-    <link rel="stylesheet" href="/css/jstree.style.min.css"/>
+    <link rel="stylesheet" href="/css/jstree.style.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://developer-stg.api.autodesk.com/viewingservice/v1/viewers/style.css"
           type="text/css">
@@ -17,17 +17,20 @@
 <body>
 <div class="container">
     <div class="jumbotron">
-        <h1>Autodesk Forge DM Basic Sample</h1>
-        <h4>Show the entire list of
+        <h2>Data Management API - Basic NodeJS sample</h2>
+        <h4>Show all
             <span class="glyphicon glyphicon-inbox"></span> Hubs,
             <span class="glyphicon glyphicon-list-alt"></span> Projects,
             <span class="glyphicon glyphicon-folder-open"></span> Folders,
             <span class="glyphicon glyphicon-briefcase"></span> Items and
             <span class="glyphicon glyphicon-time"></span> Versions under your
             account.</h4>
-        <h4>Select an item version to show a file using <a href="https://developer.autodesk.com/api/viewerapi/">
+        <h4>Each version have a tooltip, select it to show using <a
+                href="https://developer.autodesk.com/api/viewerapi/">
             Autodesk Viewer</a></h4>
-        <h6>Writen by <a href="http://twitter.com/augustomaia">Augusto Goncalves</a> in JavaScript & NodeJS </h6>
+        <h4>Righ-click on <!--Projects or -->Folders to upload, or on Versions to download or send to <a
+                href="https://www.dropbox.com/">Dropbox</a></h4>
+        <h6>Writen by <a href="http://twitter.com/augustomaia" target="_blank">Augusto Goncalves</a>. Find more about <a href="http://forge.autodesk.com" target="_blank">Forge</a></h6>
         <div class="row" style="background: white">
             <div class="col-sm-3 forgeDMTreeView">
                 <div id="myfiles">
@@ -51,6 +54,7 @@
         </div>
     </div>
 </div>
-<input id="hiddenUploadField" type="file" style="visibility:hidden" />
+<form id="uploadFile" method='post' enctype="multipart/form-data"><input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden"/></form>
+<div id="thumbnail_tooltip" class="forgeTooltip"><img src=""/></div>
 </body>
 </html>

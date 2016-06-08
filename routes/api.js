@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var multer  = require('multer')
+var upload = multer({ dest: './tmp' }) // ToDo: erase after upload to Autodesk
+
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
@@ -130,6 +133,12 @@ router.get('/download', function (req, res) {
         res.set('Content-Type', 'application/' + fileExtension);
         res.set('Content-Disposition', 'attachment; filename="' + fileName + '"');
         res.end(file);
+    });
+});
+
+router.post('/upload',upload.single('fileToUpload'), function (req, res) {
+    dm.uploadFile(req.body.id, req.file, req.session.env, req.session.oauthcode, function (data) {
+        res.end(data);
     });
 });
 
