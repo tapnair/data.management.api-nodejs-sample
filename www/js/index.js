@@ -339,11 +339,10 @@ function initializeViewer(urn) {
     console.log("Launching Autodesk Viewer for: " + urn);
     var options = {
         'document': 'urn:' + urn,
-        'env': 'AutodeskStaging',
+        'env': 'AutodeskProduction',
         'getAccessToken': get3LegToken,
         'refreshToken': get3LegToken,
     };
-    //$('#viewer').css("background-image", "url(/api/getThumbnail?urn=" + urn + ")");
 
     var viewerElement = document.getElementById('viewer');
     viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerElement, {});
@@ -354,18 +353,14 @@ function initializeViewer(urn) {
             loadDocument(options.document);
         }
     );
-
-    //loadDocument(options.document);
 }
 
 function loadDocument(documentId) {
     // first let's get the 3 leg token (developer & user & autodesk)
     var oauth3legtoken = get3LegToken();
-    //Autodesk.Viewing.Private.refreshToken(oauth3legtoken); // workaround by Weinan Chen
     Autodesk.Viewing.Document.load(
         documentId,
         function (doc) { // onLoadCallback
-            //var geometryItems = [];
             geometryItems = Autodesk.Viewing.Document.getSubItemsWithProperties(doc.getRootItem(), {
                 'type': 'geometry',
             }, true);
@@ -382,12 +377,11 @@ function loadDocument(documentId) {
             }
         },
         function (errorMsg) { // onErrorCallback
-            // no LMV, show thumbnail instead >> working fine
             showThumbnail(documentId.substr(4, documentId.length - 1));
         }
         , {
             'oauth2AccessToken': oauth3legtoken,
-            'x-ads-acm-namespace': 'WIPDMSTG',//'WIPDMSecured',
+            'x-ads-acm-namespace': 'WIPDM',//'WIPDMSecured',
             'x-ads-acm-check-groups': 'true',
         }
     )

@@ -234,7 +234,7 @@ function download(resource, env, token, onsuccess) {
         method: "GET",
         headers: {
             'Authorization': 'Bearer ' + token,
-            'x-ads-acm-namespace': 'WIPDMSTG',
+            'x-ads-acm-namespace': 'WIPDM',
             'x-ads-acm-check-groups': true
         },
         encoding: null

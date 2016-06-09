@@ -43,7 +43,7 @@ module.exports = {
     },
 
     a360comments: function (itemId) {
-        return '/a360stg/v1/items/' + itemId + '/comments';
+        return '/a360/v1/items/' + itemId + '/comments';
     },
-    a360addComment: '/a360stg/v1/comments',
+    a360addComment: '/a360/v1/comments',
 }

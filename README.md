@@ -2,7 +2,7 @@
 
 [![Node.js](https://img.shields.io/badge/Node.js-4.4.3-blue.svg)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-2.15.1-blue.svg)](https://www.npmjs.com/)
-[![LMV](https://img.shields.io/badge/View%20%26%20Data%20API-v2.8-green.svg)](http://developer-autodesk.github.io/)
+[![Viewer](https://img.shields.io/badge/Viewer-v2.8-green.svg)](http://developer-autodesk.github.io/)
 ![Platforms](https://img.shields.io/badge/platform-windows%20%7C%20osx%20%7C%20linux-lightgray.svg)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://opensource.org/licenses/MIT)
 
@@ -29,7 +29,7 @@ Open the browser and type: http://local.host:3000 (assuming the above workaround
 
 # Usage
 
-You must have files under your A360 account. Go to [A360 Staging](https://a360-staging.autodesk.com/) and create a project and upload some files.
+You must have files under your A360 account. Go to [A360](https://a360.autodesk.com/) and create a project and upload some files.
 
 Start the sample (see Setup above). Login using your Autodesk Account. Expand the tree view until the <b>Version</b> (small clock icon) and click on it. The Autodesk Viewer should appear on the right with the viewable linked to this specific file version. For each Version it will show a thumbnail and allow <b>Download</b> and <b>Send to DropBox</b> (requires Dropbox user & password, plus developer key and secret - see Dropbox integration below). Each Project allow <b>Upload</b> of files (known issue: uploaded files are not showing on A360 UI).
 
