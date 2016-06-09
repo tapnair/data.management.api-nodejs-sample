@@ -92,6 +92,7 @@ function prepareTree() {
             'data': {
                 "url": '/api/getTreeNode',
                 "dataType": "json",
+                'multiple': false,
                 "data": function (node) {
                     return {"id": node.id};
                 }
@@ -125,6 +126,7 @@ function prepareTree() {
     }).bind("activate_node.jstree", function (evt, data) {
             if (data != null && data.node != null && data.node.data != null) {
                 initializeViewer(data.node.data);
+                showComments(data.node);
             }
         }
     ).on('hover_node.jstree', function (e, data) {
@@ -268,6 +270,54 @@ function uploadFile(node) {
                  xhr.send(formData);
                  */
                 break;
+        }
+    });
+}
+
+function showComments(node) {
+    // the version node only have the URN, but the comments are stored on the item
+    var parentNodeId = node.parent;
+    $.ajax({
+        url: '/api/comments',
+        type: 'GET',
+        data: {item: parentNodeId},
+        success: function (comments) {
+            comments = JSON.parse(comments);
+            //$("#comments").html('<div class="panel-group">');
+            var commentsHTML = [];
+            commentsHTML.push('<div class="panel panel-default"><div class="panel-heading">Comments</div><div class="panel-body">');
+            commentsHTML.push('<textarea id="newComment" class="form-control" placeholder="Enter a new comment..." rows="3"></textarea><br /><button class="btn btn-primary btn-sm pull-right" onclick="postComment()">Post</button><div class="clearfix"></div><hr />');
+            commentsHTML.push('<ul class="media-list">');
+            comments.forEach(function (item, index) {
+                var date = moment(item.date);
+                commentsHTML.push(
+                    '<li class="media">' +
+                    '<span class="pull-left glyphicon glyphicon-user"></span>' +
+                    '<div class="media-body">' +
+                    '<span class="text-muted pull-right"><small class="text-muted" title="' +
+                    date.format('MMMM Do YYYY, h:mm:ss a') + '">' + date.fromNow() + '</small></span>' +
+                    '<strong class="text-success">' + item.author + '</strong>' +
+                    '<p>' + item.comment + '</p></div></li>'
+                );
+            })
+            commentsHTML.push('</ul></div></div>')
+            $("#comments").html(commentsHTML.join(''));
+        }
+    });
+}
+
+function postComment() {
+    var currentNode = $('#myfiles').jstree(true).get_selected(true)[0]
+    var currentNodeId = currentNode.id;
+
+    $.ajax({
+        url: '/api/addcomment',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({version: currentNodeId, comment: $('#newComment').val()}),
+        success: function (comments) {
+            showComments(currentNode);
         }
     });
 }

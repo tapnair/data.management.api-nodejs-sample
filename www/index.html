@@ -12,10 +12,12 @@
     <script language="JavaScript" src="/js/index.js"></script>
     <script src="/js/jstree.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/moment.min.js"></script>
     <script src="https://developer-stg.api.autodesk.com/viewingservice/v1/viewers/viewer3D.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
+
     <div class="jumbotron">
         <h2>Data Management API - Basic NodeJS sample</h2>
         <h4>Show all
@@ -30,9 +32,10 @@
             Autodesk Viewer</a></h4>
         <h4>Righ-click on <!--Projects or -->Folders to upload, or on Versions to download or send to <a
                 href="https://www.dropbox.com/">Dropbox</a></h4>
-        <h6>Writen by <a href="http://twitter.com/augustomaia" target="_blank">Augusto Goncalves</a>. Find more about <a href="http://forge.autodesk.com" target="_blank">Forge</a></h6>
+        <h6>Writen by <a href="http://twitter.com/augustomaia" target="_blank">Augusto Goncalves</a>. Find more about <a
+                href="http://forge.autodesk.com" target="_blank">Forge</a></h6>
         <div class="row" style="background: white">
-            <div class="col-sm-3 forgeDMTreeView">
+            <div class="col-md-3 forgeDMTreeView">
                 <div id="myfiles">
                     <br/>
                     <a href="#" id="authenticate" class="btn btn-warning btn-block"><span
@@ -47,14 +50,19 @@
 
                 </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-md-7">
                 <div id="viewables" class="forgeViewables"></div>
                 <div id="viewer" class="forgeViewer"></div>
+            </div>
+            <div class="col-md-2 twt-wrapper" id="comments">
+                <!--Comments will showup here-->
             </div>
         </div>
     </div>
 </div>
-<form id="uploadFile" method='post' enctype="multipart/form-data"><input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden"/></form>
+<form id="uploadFile" method='post' enctype="multipart/form-data">
+    <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden"/>
+</form>
 <div id="thumbnail_tooltip" class="forgeTooltip"><img src=""/></div>
 </body>
 </html>

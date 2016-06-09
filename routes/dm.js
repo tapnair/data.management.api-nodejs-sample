@@ -133,7 +133,7 @@ module.exports = {
     }
 };
 
-function storageSpecData(filename, folderId){
+function storageSpecData(filename, folderId) {
     var storageSpecs =
     {
         data: {
@@ -154,7 +154,7 @@ function storageSpecData(filename, folderId){
     return storageSpecs;
 }
 
-function versionSpecData(filename, folderId, objectId){
+function versionSpecData(filename, folderId, objectId) {
     var versionSpec =
     {
         jsonapi: {

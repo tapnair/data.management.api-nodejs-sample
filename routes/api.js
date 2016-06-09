@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var multer  = require('multer')
-var upload = multer({ dest: './tmp' }) // ToDo: erase after upload to Autodesk
+var multer = require('multer')
+var upload = multer({dest: './tmp'}) // ToDo: erase after upload to Autodesk
 
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
@@ -11,6 +11,7 @@ var config = require('./config');
 var OAuth2 = require('oauth').OAuth2;
 
 var dm = require("./dm");
+var a360 = require("./a360");
 
 // listen for calls on http://local.host/authenticate endpoint
 router.post('/authenticate', jsonParser, function (req, res) {
@@ -49,7 +50,7 @@ router.post('/authenticate', jsonParser, function (req, res) {
                 // this response will have the access token we need to all
                 // calls to ForgeDM endpoints (to read user data), let’s store in session
                 req.session.oauthcode = access_token;
-                req.session.cookie.maxAge = parseInt(results.expires_in) * 1000* 60; // same as access_token
+                req.session.cookie.maxAge = parseInt(results.expires_in) * 1000 * 60; // same as access_token
                 // assuming the login was a popup, let's close it
                 res.end('<script>window.opener.location.reload(false);window.close();</script>');
             }
@@ -136,9 +137,28 @@ router.get('/download', function (req, res) {
     });
 });
 
-router.post('/upload',upload.single('fileToUpload'), function (req, res) {
+router.post('/upload', upload.single('fileToUpload'), function (req, res) {
     dm.uploadFile(req.body.id, req.file, req.session.env, req.session.oauthcode, function (data) {
         res.end(data);
+    });
+});
+
+router.get('/comments', function (req, res) {
+    var itemUrl = req.query.item;
+    var params = itemUrl.split('/');
+    var itemId = unescape(params[params.length - 1]); // need to check unescape
+    a360.getComments(new Buffer(itemId).toString('base64'), req.session.env, req.session.oauthcode, function (comments) {
+        res.end(JSON.stringify(comments));
+    });
+});
+
+router.post('/addcomment',jsonParser, function (req, res) {
+    var versionUrl = req.body.version;
+    var comment = req.body.comment;
+    var params = versionUrl.split('/');
+    var versionId = unescape(params[params.length - 1]); // need to check unescape
+    a360.addComment(new Buffer(versionId).toString('base64'), comment, req.session.env, req.session.oauthcode, function (body) {
+        res.end(JSON.stringify(body));
     });
 });
 

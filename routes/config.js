@@ -40,5 +40,10 @@ module.exports = {
     },
     version: function (projectId, versionId) {
         return '/data/' + DM_PROJECT_VERSION + '/projects/' + projectId + '/versions/' + versionId;
-    }
+    },
+
+    a360comments: function (itemId) {
+        return '/a360stg/v1/items/' + itemId + '/comments';
+    },
+    a360addComment: '/a360stg/v1/comments',
 }
