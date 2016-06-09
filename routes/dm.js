@@ -29,6 +29,7 @@ module.exports = {
 
     getFolderContents: function (projectid, folderid, env, token, onsuccess) {
         makeRequest(config.folderContents(projectid, folderid), env, token, function (body) {
+            //console.log(JSON.stringify(body.data, null, 4));
             onsuccess(body.data);
         });
     },
@@ -62,9 +63,9 @@ module.exports = {
 
             // ******************************
             // step 2. create a storage entry
-            console.log('Requesting ' + config.baseURL(env) + resource);
             var rootFolderId = project.data.relationships.rootFolder.data.id;
             var resource = '/data/v1/projects/' + projectId + '/storage';
+            console.log('Requesting ' + config.baseURL(env) + resource);
             request({
                 url: config.baseURL(env) + resource,
                 method: "POST",
@@ -92,17 +93,17 @@ module.exports = {
                 // and get the BucketKey
                 var bucketKey = parameters[parameters.length - 1];
 
-                console.log(file.path);
+                var minetype = getMineType(file);
                 var fs = require('fs');
                 fs.readFile(file.path, function (err, filecontent) {
                     var ossresource = '/oss/v2/buckets/' + bucketKey + '/objects/' + objectKey
-                    console.log('Requesting ' + config.baseURL(env) + ossresource);
+                    console.log('Uploading ' + minetype + ': ' + config.baseURL(env) + ossresource);
                     request({
                         url: config.baseURL(env) + ossresource,
                         method: "PUT",
                         headers: {
                             'Authorization': 'Bearer ' + token,
-                            'Content-Type': file.mimetype
+                            'Content-Type': minetype
                         },
                         body: filecontent
                     }, function (error, response, body) {
@@ -132,6 +133,24 @@ module.exports = {
 
     }
 };
+
+function getMineType(file) {
+    var arr = file.originalname.split('.');
+    var extension = arr[arr.length - 1];
+    var types = {
+        'png': 'application/image',
+        'jpg': 'application/image',
+        'txt': 'application/txt',
+        'ipt': 'application/vnd.autodesk.inventor.part',
+        'iam': 'application/vnd.autodesk.inventor.assembly',
+        'dwf': 'application/vnd.autodesk.autocad.dwf',
+        'dwg': 'application/vnd.autodesk.autocad.dwg',
+        'f3d': 'application/vnd.autodesk.fusion360',
+        'f2d': 'application/vnd.autodesk.fusiondoc',
+        'rvt': 'application/vnd.autodesk.revit'
+    };
+    return (types[extension] != null ? types[extension] : file.mimetype);
+}
 
 function storageSpecData(filename, folderId) {
     var storageSpecs =
