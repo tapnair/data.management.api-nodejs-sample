@@ -10,7 +10,9 @@
 
 # Description
 
-This is a basic sample for Forge Data Management API. It was designed for initial testing on multiple enviroments (DEV, STG and PROD). Alse use Autodesk Viewer  for showing models. Set of consumer key and secret are required (at least on environment), please visit [Forge](http://developer.autodesk.com) for more information.
+This is a basic sample for Forge Data Management API. It was designed for initial testing on multiple enviroments (DEV, STG and PROD). In most cases, you'll use PRODUCTION keys from [Forge Platform](http://developer.autodesk.com).
+
+Also use Autodesk Viewer  for showing models. Set of consumer key and secret are required (at least on environment), please visit [Forge](http://developer.autodesk.com) for more information.
 
 # Live demo
 

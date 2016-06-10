@@ -19,7 +19,7 @@
 module.exports = {
     baseUrl: 'https://developer-stg.api.autodesk.com',
     credentials: {
-        consumerKey: '<< request at developer.autodesk.com >>',
-        consumerSecret: ''
+        consumerKey: process.env.CONSUMERKEY || '<replace with your consumer key>',
+        consumerSecret: process.env.CONSUMERSECRET || '<replace with your consumer secret>',
     }
 }
