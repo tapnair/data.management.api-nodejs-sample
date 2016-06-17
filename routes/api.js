@@ -180,6 +180,15 @@ router.post('/addcomment',jsonParser, function (req, res) {
     });
 });
 
+router.get('/getMembers', function(req, res){
+    var id = req.query.id;
+    var params = id.split('/');
+    var hubId = params[params.length-1];
+    a360.getMembers(hubId, req.session.env, req.session.oauthcode, function(members){
+        res.end(JSON.stringify(members));
+    });
+});
+
 module.exports = router;
 
 function makeTree(listOf, canHaveChildren, data) {

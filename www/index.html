@@ -14,6 +14,11 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/moment.min.js"></script>
     <script src="https://developer.api.autodesk.com/viewingservice/v1/viewers/viewer3D.min.js"></script>
+    <style>
+        .list-group-item {
+            padding: 3px 3px;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -43,8 +48,8 @@
                     <hr>
                     <label for="env">Select environment:</label>
                     <select id="env" class="input-small form-control" style="width:150px;">
-                        <option value="dev">Development</option>
-                        <option value="stg">Staging</option>
+                        <!--<option value="dev">Development</option>-->
+                        <!--<option value="stg">Staging</option>-->
                         <option value="prod" selected>Production</option>
                     </select>
 
@@ -63,6 +68,6 @@
 <form id="uploadFile" method='post' enctype="multipart/form-data">
     <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden"/>
 </form>
-<div id="thumbnail_tooltip" class="forgeTooltip"><img src=""/></div>
+<div id="thumbnail_tooltip"></div>
 </body>
 </html>

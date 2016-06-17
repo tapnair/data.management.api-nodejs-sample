@@ -21,12 +21,12 @@ var DM_PROJECT_VERSION = 'v1';
 
 module.exports = {
     // change /etc/hosts file to redirect loca.host as 127.0.0.1
-    redirectUrl: 'http://local.host:3000/api/autodesk/callback',
-
+    redirectUrl:  'http://local.host:3000/api/autodesk/callback', 
+    
     authenticationUrl: '/authentication/' + OAUTH_VERSION + '/authorize',
     accessTokenUrl: '/authentication/' + OAUTH_VERSION + '/gettoken',
 
-    scope: 'data:read data:create data:write bucket:read',//['data:read', 'data:create', 'data:write', 'bucket:read', 'bucket:create'],
+    scope: 'data:read data:create data:write bucket:read',
 
     baseURL: function (env) {
         return require('./config-' + env).baseUrl;
@@ -61,7 +61,10 @@ module.exports = {
     },
 
     a360comments: function (itemId) {
-        return '/a360/v1/items/' + itemId + '/comments';
+        return 'COMMING SOON';
     },
-    a360addComment: '/a360/v1/comments',
+    a360addComment: 'COMMING SOON',
+    a360hubMembers : function (hubId){
+        return 'COMMING SOON';
+    }
 }

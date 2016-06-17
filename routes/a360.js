@@ -62,6 +62,18 @@ module.exports = {
         makeRequest(config.a360addComment, JSON.stringify(newVersionCommentSpec), 'POST', env, token, function (body) {
             onsuccess(body);
         });
+    },
+
+    getMembers: function (hubId, env, token, onsuccess) {
+        makeRequest(config.a360hubMembers(hubId), null, null, env, token, function (body) {
+            var members = [];
+            body.data.forEach(function (item, index) {
+                members.push({
+                    name: item.attributes.firstName + ' ' + item.attributes.lastName, role: item.attributes.role
+                });
+            });
+            onsuccess(members);
+        });
     }
 };
 

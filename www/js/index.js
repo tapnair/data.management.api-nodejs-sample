@@ -16,6 +16,7 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
+
 // for tooltips
 var mouse_x = 0;
 var mouse_y = 0;
@@ -148,15 +149,37 @@ function prepareTree() {
             }
         }
     ).on('hover_node.jstree', function (e, data) {
-        if (data.node.type === 'versions') {
-            $('#thumbnail_tooltip').find('img').attr('src', '/api/getThumbnail?urn=' + data.node.data);
-            $('#thumbnail_tooltip')
-                .css('position', 'absolute')
-                .css('top', mouse_y)
-                .css('left', mouse_x)
-                .show();
+            var show = false;
+            if (data.node.type === 'versions') {
+                $('#thumbnail_tooltip').html('<img src="/api/getThumbnail?urn=' + data.node.data + '" class="forgeTooltip"/>');
+                show = true;
+            }
+            else if (data.node.type === 'hubs') {
+                $.ajax({
+                    url: '/api/getmembers?id=' + data.node.id,
+                    type: 'GET',
+                    success: function (members) {
+                        members = JSON.parse(members);
+                        var output = '<ul class="list-group"><li class="list-group-item active">Members:</li>';
+                        members.forEach(function (item) {
+                            output += '<li class="list-group-item"><span class="badge">' + item.role + '</span>   ' + item.name + '</li>';
+                        })
+                        output += '</ul>';
+                        $('#thumbnail_tooltip').html(output)
+                    }
+                });
+                show = true;
+            }
+
+            if (show) {
+                $('#thumbnail_tooltip')
+                    .css('position', 'absolute')
+                    .css('top', mouse_y)
+                    .css('left', mouse_x)
+                    .show();
+            }
         }
-    }).on('dehover_node.jstree', function () {
+    ).on('dehover_node.jstree', function () {
         $('#thumbnail_tooltip').hide();
     });
 }
