@@ -255,6 +255,7 @@ function sendToDropBox(name, id) {
 
             }
         });
+      sendToDropBox2(name, id)
     }
     else {
         var params = id.split('/');
@@ -270,7 +271,17 @@ function sendToDropBox(name, id) {
         });
     }
 }
-
+function sendToDropBox2(name, id){
+  var params = id.split('/');
+  var pId = params[params.length - 3];
+  var vId = params[params.length - 1];
+  $.ajax({
+      url: '/dropbox/sentToDropbox',
+      type: 'GET',
+      data: {f: name, p: pId, v: vId},
+      success: function (res) {
+          console.log(res);
+}
 
 function uploadFile(node) {
     $('#hiddenUploadField').click();
