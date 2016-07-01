@@ -235,7 +235,7 @@ function downloadFile(name, id) {
 }
 
 function sendToDropBox(name, id) {
-    var token = makeSyncRequest('/api/getDropboxToken');
+    var token = makeSyncRequest('/dropbox/getDropboxToken');
     if (token === '') {
         $.ajax({
             url: '/api/dropbox',
@@ -261,7 +261,7 @@ function sendToDropBox(name, id) {
         var pId = params[params.length - 3];
         var vId = params[params.length - 1];
         $.ajax({
-            url: '/api/sentToDropbox',
+            url: '/dropbox/sentToDropbox',
             type: 'GET',
             data: {f: name, p: pId, v: vId},
             success: function (res) {
