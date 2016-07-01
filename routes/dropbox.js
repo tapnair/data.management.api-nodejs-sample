@@ -59,7 +59,7 @@ router.post('/dropbox', jsonParser, function (req, res) {
                 {Location: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback?code=' + req.query.code}
             );
             res.end();
-            return;
+            //return;
         //}
         // end of workaround, please remove on production
 
