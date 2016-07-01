@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development 
+// Written by Augusto Goncalves 2016 - Forge Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -145,7 +145,7 @@ function prepareTree() {
     }).bind("activate_node.jstree", function (evt, data) {
             if (data != null && data.node != null && data.node.data != null) {
                 initializeViewer(data.node.data);
-                showComments(data.node);
+                //showComments(data.node);
             }
         }
     ).on('hover_node.jstree', function (e, data) {
