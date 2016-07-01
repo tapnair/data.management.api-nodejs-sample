@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development 
+// Written by Augusto Goncalves 2016 - Forge Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -35,15 +35,15 @@ router.post('/dropbox', jsonParser, function (req, res) {
     var id = req.body.id;
 
     var oauth2 = new OAuth2(
-        '<<YOUR DROPBOX KEY>>',
-        '<<YOUR DROPBOX KEY>>',
+        'jb51qwzua1dz61h',
+        '3be3j3vs96q4ff7',
         'https://www.dropbox.com',
         '/oauth2/authorize',
         '/oauth2/token',
         null);
 
     var authURL = oauth2.getAuthorizeUrl({
-        redirect_uri: 'http://localhost:3000/api/dropbox/callback'
+        redirect_uri: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback'
     });
 
     // this will await the callback
@@ -56,7 +56,7 @@ router.post('/dropbox', jsonParser, function (req, res) {
         /////////
         if (req.headers.host == 'localhost:3000') {
             res.writeHead(301,
-                {Location: 'http://local.host:3000/api/dropbox/callback?code=' + req.query.code}
+                {Location: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback?code=' + req.query.code}
             );
             res.end();
             return;
@@ -67,7 +67,7 @@ router.post('/dropbox', jsonParser, function (req, res) {
             req.query.code,
             {
                 'grant_type': 'authorization_code',
-                'redirect_uri': 'http://localhost:3000/api/dropbox/callback'
+                'redirect_uri': 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback'
             },
             function (e, access_token, refresh_token, results) {
                 req.session.dropbox = access_token;
