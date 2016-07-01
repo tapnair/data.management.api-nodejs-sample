@@ -43,7 +43,7 @@ Start the sample (see Setup above). Login using your Autodesk Account. Expand th
 
 # DropBox integration
 
-The feature <b>Send to DropBox</b> requires a developer key & secret. Please visit [DropBox Developer](https://www.dropbox.com/developers/apps) and create one.  Update the file /routes/dropbox.js with this information. For this sample, make sure to use http://localhost:3000/api/dropbox/callback as Redirect URI (for OAuth authentication) on Dropbox key creation. This sample code have a workaround to deal with local.host & localhost redirect, see comments at dropbox.js file. Also note that new developer keys on dropbox are created with Status:Development, so it will only work with your account (owner of the key). You must apply for Prodction with Dropbox team so you can use with other users.
+The feature <b>Send to DropBox</b> requires a developer key & secret. Please visit [DropBox Developer](https://www.dropbox.com/developers/apps) and create one.  Update the file /routes/dropbox.js with this information. For this sample, i have used Heroku config parameters to mask the keys. See coments in dropbox.js. Also note that new developer keys on dropbox are created with Status:Development, so it will only work with your account (owner of the key). You must apply for Prodction with Dropbox team so you can use with other users.
 
 
 ## License
