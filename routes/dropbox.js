@@ -54,13 +54,13 @@ router.post('/dropbox', jsonParser, function (req, res) {
         // but DropBox accepts localhost but don't accept local.host (unless is https)
         // so if we receive a callback on localhost, redirect to local.host
         /////////
-        if (req.headers.host == 'localhost:3000') {
+        //if (req.headers.host == 'localhost:3000') {
             res.writeHead(301,
                 {Location: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback?code=' + req.query.code}
             );
             res.end();
             return;
-        }
+        //}
         // end of workaround, please remove on production
 
         oauth2.getOAuthAccessToken(
