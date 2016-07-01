@@ -256,7 +256,7 @@ function sendToDropBox(name, id) {
             }
         });
     }
-    // else {
+    else {
         var params = id.split('/');
         var pId = params[params.length - 3];
         var vId = params[params.length - 1];
@@ -268,7 +268,7 @@ function sendToDropBox(name, id) {
                 console.log(res);
             }
         });
-    // }
+    }
 }
 
 
