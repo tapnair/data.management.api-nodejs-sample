@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development 
+// Written by Augusto Goncalves 2016 - Forge Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -21,8 +21,9 @@ var DM_PROJECT_VERSION = 'v1';
 
 module.exports = {
     // change /etc/hosts file to redirect loca.host as 127.0.0.1
-    redirectUrl:  'http://local.host:3000/api/autodesk/callback', 
-    
+    // redirectUrl:  'http://local.host:3000/api/autodesk/callback',
+    redirectUrl: 'https://forgeconnectortester.herokuapp.com/api/autodesk/callback',
+
     authenticationUrl: '/authentication/' + OAUTH_VERSION + '/authorize',
     accessTokenUrl: '/authentication/' + OAUTH_VERSION + '/gettoken',
 

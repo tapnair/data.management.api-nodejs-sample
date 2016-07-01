@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Augusto Goncalves 2016 - Forge Partner Development 
+// Written by Augusto Goncalves 2016 - Forge Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -19,7 +19,7 @@
 module.exports = {
     baseUrl: 'https://developer.api.autodesk.com',
     credentials: {
-        consumerKey: process.env.CONSUMERKEY || '<replace with your consumer key>',
-        consumerSecret: process.env.CONSUMERSECRET || '<replace with your consumer secret>',
+        consumerKey: process.env.CONSUMERKEY || 'c9dZhs551ve7teEf0eQzg1MGsa5vDlYp',
+        consumerSecret: process.env.CONSUMERSECRET || 'omG4jBuTGyrFW7sP',
     }
 }
