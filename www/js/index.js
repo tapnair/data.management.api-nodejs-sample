@@ -281,6 +281,8 @@ function sendToDropBox2(name, id){
       data: {f: name, p: pId, v: vId},
       success: function (res) {
           console.log(res);
+      }
+    });
 }
 
 function uploadFile(node) {
