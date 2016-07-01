@@ -65,13 +65,14 @@ module.exports = {
     },
     version: function (projectId, versionId) {
         return '/data/' + DM_PROJECT_VERSION + '/projects/' + projectId + '/versions/' + versionId;
-    },
-
-    a360comments: function (itemId) {
-        return 'COMMING SOON';
-    },
-    a360addComment: 'COMMING SOON',
-    a360hubMembers : function (hubId){
-        return 'COMMING SOON';
     }
+    // ,
+
+    // a360comments: function (itemId) {
+    //     return 'COMMING SOON';
+    // },
+    // a360addComment: 'COMMING SOON',
+    // a360hubMembers : function (hubId){
+    //     return 'COMMING SOON';
+    // }
 }
