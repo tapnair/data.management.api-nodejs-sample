@@ -28,6 +28,11 @@ var OAuth2 = require('oauth').OAuth2;
 var dm = require("./dm");
 var request = require('request');
 
+// Here specifically using values stored in Heroku config
+// Replace with your Dropbox keys ro use your heroku environment
+var DB_APP_KEY = process.env.DB_APP_KEY
+var DB_APP_SECRET = process.env.DB_APP_SECRET
+
 // Dropbox API Authentication endpoints
 router.post('/dropbox', jsonParser, function (req, res) {
     var env = req.body.env;
@@ -35,8 +40,8 @@ router.post('/dropbox', jsonParser, function (req, res) {
     var id = req.body.id;
 
     var oauth2 = new OAuth2(
-        'jb51qwzua1dz61h',
-        '3be3j3vs96q4ff7',
+        DB_APP_KEY,
+        DB_APP_SECRET,
         'https://www.dropbox.com',
         '/oauth2/authorize',
         '/oauth2/token',
