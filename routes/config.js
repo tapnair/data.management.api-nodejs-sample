@@ -30,7 +30,13 @@ module.exports = {
     scope: 'data:read data:create data:write bucket:read',
 
     baseURL: function (env) {
-        return require('./config-' + env).baseUrl;
+        if env == "undefined"{
+          return require('./config-' + 'prod').baseUrl;
+        }
+        else {
+          return require('./config-' + env).baseUrl;
+        }
+
     },
     credentials: {
         consumerKey: function (env) {
