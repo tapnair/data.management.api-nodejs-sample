@@ -154,22 +154,22 @@ function prepareTree() {
                 $('#thumbnail_tooltip').html('<img src="/api/getThumbnail?urn=' + data.node.data + '" class="forgeTooltip"/>');
                 show = true;
             }
-            else if (data.node.type === 'hubs') {
-                $.ajax({
-                    url: '/api/getmembers?id=' + data.node.id,
-                    type: 'GET',
-                    success: function (members) {
-                        members = JSON.parse(members);
-                        var output = '<ul class="list-group"><li class="list-group-item active">Members:</li>';
-                        members.forEach(function (item) {
-                            output += '<li class="list-group-item"><span class="badge">' + item.role + '</span>   ' + item.name + '</li>';
-                        })
-                        output += '</ul>';
-                        $('#thumbnail_tooltip').html(output)
-                    }
-                });
-                show = true;
-            }
+            // else if (data.node.type === 'hubs') {
+            //     $.ajax({
+            //         url: '/api/getmembers?id=' + data.node.id,
+            //         type: 'GET',
+            //         success: function (members) {
+            //             members = JSON.parse(members);
+            //             var output = '<ul class="list-group"><li class="list-group-item active">Members:</li>';
+            //             members.forEach(function (item) {
+            //                 output += '<li class="list-group-item"><span class="badge">' + item.role + '</span>   ' + item.name + '</li>';
+            //             })
+            //             output += '</ul>';
+            //             $('#thumbnail_tooltip').html(output)
+            //         }
+            //     });
+            //     show = true;
+            // }
 
             if (show) {
                 $('#thumbnail_tooltip')
