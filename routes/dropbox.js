@@ -43,7 +43,7 @@ router.post('/dropbox', jsonParser, function (req, res) {
         null);
 
     var authURL = oauth2.getAuthorizeUrl({
-        redirect_uri: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback'
+        redirect_uri: 'https://forgeconnectortester.herokuapp.com/dropbox/dropbox/callback'
     });
 
     // this will await the callback
@@ -55,10 +55,10 @@ router.post('/dropbox', jsonParser, function (req, res) {
         // so if we receive a callback on localhost, redirect to local.host
         /////////
         //if (req.headers.host == 'localhost:3000') {
-            res.writeHead(301,
-                {Location: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback?code=' + req.query.code}
-            );
-            res.end();
+            // res.writeHead(301,
+            //     {Location: 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback?code=' + req.query.code}
+            // );
+            // res.end();
             //return;
         //}
         // end of workaround, please remove on production
@@ -67,7 +67,7 @@ router.post('/dropbox', jsonParser, function (req, res) {
             req.query.code,
             {
                 'grant_type': 'authorization_code',
-                'redirect_uri': 'https://forgeconnectortester.herokuapp.com/api/dropbox/callback'
+                'redirect_uri': 'https://forgeconnectortester.herokuapp.com/dropbox/callback'
             },
             function (e, access_token, refresh_token, results) {
                 req.session.dropbox = access_token;
