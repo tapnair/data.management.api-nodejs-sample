@@ -238,7 +238,7 @@ function sendToDropBox(name, id) {
     var token = makeSyncRequest('/dropbox/getDropboxToken');
     if (token === '') {
         $.ajax({
-            url: '/api/dropbox',
+            url: '/dropbox/dropbox',
             type: 'POST',
             contentType: 'application/json',
             dataType: 'json',
