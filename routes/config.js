@@ -30,7 +30,7 @@ module.exports = {
     scope: 'data:read data:create data:write bucket:read',
 
     baseURL: function (env) {
-        if env == "undefined"{
+        if (env == "undefined") {
           return require('./config-' + 'prod').baseUrl;
         }
         else {
