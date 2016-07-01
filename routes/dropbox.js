@@ -67,7 +67,7 @@ router.post('/dropbox', jsonParser, function (req, res) {
             req.query.code,
             {
                 'grant_type': 'authorization_code',
-                'redirect_uri': 'https://forgeconnectortester.herokuapp.com/dropbox/callback'
+                'redirect_uri': 'https://forgeconnectortester.herokuapp.com/dropbox/dropbox/callback'
             },
             function (e, access_token, refresh_token, results) {
                 req.session.dropbox = access_token;
